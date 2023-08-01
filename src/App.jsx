@@ -1,11 +1,11 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import './src/App.css'
+import '../src/App.css'
 import Dashboard from './src/components/Dashboard/Dashboard'
-import Authentication from './src/components/auth/Authentication'
+import Authentication from '../src/components/auth/Authentication'
 import { useState, useEffect} from 'react'
-import LogIn from './src/components/auth/LogIn'
-import Registration from './src/components/auth/Registration'
-import { UserAuthContext } from './src/Helper/Context'
+import LogIn from '../src/components/auth/LogIn'
+import Registration from '../src/components/auth/Registration'
+import { UserAuthContext } from '../src/Helper/Context'
 
 function App() {
   const [userAuth, setUserAuth] = useState(false)
