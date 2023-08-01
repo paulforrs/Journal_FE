@@ -8,7 +8,7 @@ import Registration from './components/auth/Registration'
 import { UserAuthContext } from './Helper/Context'
 
 function App() {
-  const [userAuth, setUserAuth] = useState(true)
+  const [userAuth, setUserAuth] = useState(false)
   const [tokenExpiration, setTokenExpiration] = useState(JSON.parse(sessionStorage.getItem('token_expiration')) || '')
   const [token, setToken] = useState(JSON.parse(sessionStorage.getItem('token')) || '')
  
