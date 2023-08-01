@@ -1,10 +1,10 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import './Journal_FE/src/App.css'
-import Dashboard from './components/Dashboard/Dashboard'
-import Authentication from './components/auth/Authentication'
+import Dashboard from './Journal_FE/src/components/Dashboard/Dashboard'
+import Authentication from './Journal_FE/src/components/auth/Authentication'
 import { useState, useEffect} from 'react'
-import LogIn from './components/auth/LogIn'
-import Registration from './components/auth/Registration'
+import LogIn from './Journal_FE/src/components/auth/LogIn'
+import Registration from './Journal_FE/src/components/auth/Registration'
 import { UserAuthContext } from './Journal_FE/src/Helper/Context'
 
 function App() {
