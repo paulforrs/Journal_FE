@@ -45,7 +45,9 @@ export default function Registration() {
   useEffect(()=>{
   })
   return (
-    <div>
+    <div className='auth-page'>
+        <h1>Journal App</h1>
+        <p>by: Paul Allen</p>
         <form action="">
           <label htmlFor="email">Email</label>
           <input type="email" name='email' onChange={(e)=>setEmail(e.target.value)}/>

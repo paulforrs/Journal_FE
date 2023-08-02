@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 
+
 export default function Authentication() {
   const navigate = useNavigate()
   const [showSignIn, setShowSignIn] = useState(false)
   const [showLogIn, setShowLogIn] = useState(false)
   return (
-    <div>
+    <div className="auth-home">
+      <h1>Journal App</h1>
+      <p>by: Paul Allen</p>
       <button onClick={()=> navigate("auth/signin")}>Sign in</button>
       <button onClick={()=> navigate("auth/signup")}>Register</button>
-      
     </div>
   )
 }

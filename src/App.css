@@ -1,6 +1,7 @@
 body{
   margin: 0;
 }
+
 .overlay{
   background-color: rgba(54, 54, 54, 0.416);
   position: fixed;
@@ -57,26 +58,6 @@ section{
 .dashboard-container{
   height: calc(100vh -50px);
 }
-.categories-dashboard{
-  background-color: red;
-}
-
-.category-list{
-  display: flex;
-  margin: 0;
-}
-.category-list li{
-  height: 50px;
-  list-style: none;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-}
-.category-list li:hover{
-  background-color: rgb(94, 93, 93);
-}
 .category-overlay{
   z-index: 1;
 }
@@ -86,6 +67,11 @@ section{
   display: grid;
   grid-template-columns: 2fr 3fr;
   grid-template-rows: 1fr;
+  height: calc(100vh - 50px);
+}
+.add-tasks-button{
+  height: 30px;
+  cursor: pointer;
 }
 .task-item{
   display: flex;
@@ -96,7 +82,7 @@ section{
   justify-content: space-between;
   text-align: center;
 }
-.task-item:hover{
+.task-item:not(.tasks-list-header):hover{
   background-color: antiquewhite;
 }
 .task-list-container{
@@ -110,4 +96,72 @@ section{
 }
 .incoming{
   background-color: gainsboro;
+}
+.tasks-list-header{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  cursor:default;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.536);
+}
+.show-task-wrapper{
+  display: flex;
+  flex-direction: column;
+}
+.show-task-header{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 30px;
+  text-align: center;
+}
+.task-details-container{
+  background-color: white;
+  padding: 20px;
+  border-radius: 20px;
+  height: 80vh;
+  min-height: 50vh;
+
+}
+.task-details-button{
+  height: 40px;
+  margin: 0 5px;
+  min-width: 120px;
+  max-width: 150px;
+  border: 1px rgba(88, 88, 88, 0.504) solid;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
+.task-category-wrapper h3{
+  margin: 0;
+}
+.task-details-name{
+  margin: 20px;
+}
+.task-details-category{
+
+}
+.task-details-description{
+  margin: 0 20px;
+}
+
+.save{
+  background-color: rgb(4, 195, 4);
+}
+.red{
+  background:rgb(189, 78, 41);
+}
+.edit{
+  background-color: rgb(23, 149, 227);
+}
+.task-category{
+  display: flex;
+}
+.material-symbols-outlined{
+  display: flex;
+  align-items: center;
 }

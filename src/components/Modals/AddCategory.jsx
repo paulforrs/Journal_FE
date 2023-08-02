@@ -39,6 +39,7 @@ export default function AddCategory(params) {
                 setShowAddCategoryModal(false)}}}>
 
             <div className='modal'>
+                <h1>Add Category</h1>
                 <input type="text" name="category[name]" id="" onChange={(e)=>setCategoryName(e.target.value)}/>
                 <button onClick={()=>addCategory()}>Add Category</button>
             </div>

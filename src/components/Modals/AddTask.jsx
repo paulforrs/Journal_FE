@@ -77,23 +77,35 @@ export default function AddTask(params) {
                     <option disabled hidden>Select an Category</option>
                     {categoryList(categories)}
                 </select> */}
-                <select value={categoryName} onChange={(e)=>{onChangeCategory(e)} }>
-                    {categoryName === 'default' && <option value="default" disabled selected>
-                    -- Select an option --
-                    </option>}
-                    
-                    {categoryList(categories)}
-                </select>
-                <button onClick={()=>setShowAddCategoryModal(true)}>Add Category</button>
-                <label htmlFor="task[name]">Task Name</label>
-                <input value={taskName} type="text" name="task[name]" id="task[name]" onChange={(e)=>setTaskName(e.target.value)}/>
-                <label htmlFor="due-date"></label>
-                <input value={dueDate}type="datetime-local" id="due-date" onChange={(e)=>onChangeDueDate(e)}/>
-                <label htmlFor="description"></label>
-                <input value={description}type="text" name="description" id="description" onChange={(e)=>{
-                    console.log(e.target.value)
-                    setDescription(e.target.value)
-                }}/>
+                <h1>Add Task</h1>
+                <div>
+                    <label htmlFor="task[name]">Task Name: </label>
+                    <input value={taskName} type="text" name="task[name]" id="task[name]" onChange={(e)=>setTaskName(e.target.value)}/>
+                </div>
+                <div>
+                    <label htmlFor="">Select Category: </label>
+                    <select value={categoryName} onChange={(e)=>{onChangeCategory(e)} }>
+                        {categoryName === 'default' && <option value="default" disabled selected>
+                        -- Select an option --
+                        </option>}
+                        
+                        {categoryList(categories)}
+                    </select>
+                    <button onClick={()=>setShowAddCategoryModal(true)}>Add Category</button>
+                </div>
+                <div>
+                    <label htmlFor="due-date">Due Date: </label>
+                    <input value={dueDate}type="datetime-local" id="due-date" onChange={(e)=>onChangeDueDate(e)}/>
+                </div>
+                <div>
+                    <label htmlFor="description">Task Description: </label>
+                    <input value={description}type="text" name="description" id="description" onChange={(e)=>{
+                        console.log(e.target.value)
+                        setDescription(e.target.value)
+                    }}/>
+                </div>
+                
+                
                 <button onClick={verifyParams}>Add Task</button>
             </div>
         </div>

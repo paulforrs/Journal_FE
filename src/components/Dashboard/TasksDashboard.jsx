@@ -14,6 +14,7 @@ export default function TasksDashboard(params) {
   const [incomingTasks, setIncomingTasks] = useState([])
 
   function categorizeTasks(tasks){
+    console.log('categorize')
     const completeArr = []
     const expiredArr = []
     const incomingArr = []
@@ -95,13 +96,21 @@ export default function TasksDashboard(params) {
     <>
       <div className='task-dashboard dashboard-container'>
         <section className='task-list-container'>
-          <button type="button"className='add-task-button' onClick={()=>setShowAddTaskModal(true)}>
-            Add new task
-          </button>
-          <div className='expired-tasks-container'>
+          <div className='tasks-list-header task-item'>
+            <p>Tasks List</p>
+            <button type="button"className='add-tasks-button' onClick={()=>setShowAddTaskModal(true)}>
+              Add new task
+            </button>
+          </div>
+          <div>
             <div className='task-item' onClick={toggleExpiredTasks}>
-              <p>Expired Tasks</p> 
-              <p>({expiredTasks.length})</p>
+              <div className='task-category'>
+                <p>Expired Tasks</p> 
+                <p>({expiredTasks.length})</p>
+              </div>
+              <span className="material-symbols-outlined">
+                    {showExpiredTasks ? 'expand_less' : 'expand_more'}
+                  </span>
             </div>
             {showExpiredTasks &&<div>
               {generateTasksList(expiredTasks)}
@@ -110,8 +119,13 @@ export default function TasksDashboard(params) {
           </div>
           <div>
             <div className='task-item' onClick={toggleIncomingTasks}>
-              <p>Tasks</p> 
-              <p>({incomingTasks.length})</p>
+              <div className='task-category'>
+                <p>Tasks</p> 
+                <p>({incomingTasks.length})</p>
+              </div>
+              <span className="material-symbols-outlined">
+                    {showIncomingTasks ? 'expand_less' : 'expand_more'}
+              </span>
             </div>
               {showIncomingTasks && <div>
                 {generateTasksList(incomingTasks)}
@@ -119,9 +133,14 @@ export default function TasksDashboard(params) {
           </div>
           <div>
             <div className='task-item' onClick={toggleCompletedTasks}>
-                  <p>Completed Tasks</p> 
-                  <p>({completedTasks.length})</p>
-                </div>
+              <div className='task-category'>
+                <p>Completed Tasks</p> 
+                <p>({completedTasks.length})</p>
+              </div>
+                <span className="material-symbols-outlined">
+                  {showCompletedTasks ? 'expand_less' : 'expand_more'}
+                </span>
+              </div>
                 {showCompletedTasks && <div>
                   {generateTasksList(completedTasks)}
               </div>}
@@ -129,7 +148,8 @@ export default function TasksDashboard(params) {
         </section>
         <section>
           {!isTaskEmpty && <TaskDetails taskShow={taskShow} getTasks={getTasks} setIsTaskEmpty={setIsTaskEmpty} categories={categories}
-          setShowAddCategoryModal={setShowAddCategoryModal}/>}
+          setShowAddCategoryModal={setShowAddCategoryModal}
+          setTaskShow={setTaskShow}/>}
         </section>
       </div>
       

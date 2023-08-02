@@ -5,6 +5,8 @@ import AddTask from '../Modals/AddTask'
 import CategoriesDashboard from './CategoriesDashboard'
 import TasksDashboard from './TasksDashboard'
 import { UserAuthContext } from '../../Helper/Context'
+import "../Auth/Auth.css"
+import "../Dashboard/CategoriesDashboard.css"
 
 export default function Dashboard(params) {
   const {token, setUserAuth, userAuth}= useContext(UserAuthContext)
@@ -71,6 +73,7 @@ export default function Dashboard(params) {
   //   })
   // }
   useEffect(()=>{
+    
       getTasks()
       getCategories()
   },[])
@@ -98,6 +101,10 @@ export default function Dashboard(params) {
 
         {showCategories &&
           <CategoriesDashboard
+            getCategories={getCategories}
+            setShowAddTaskModal={setShowAddTaskModal}
+            tasks = {tasks}
+            getTasks={getTasks}
             categories={categories}
             setShowAddCategoryModal={setShowAddCategoryModal}
           />}

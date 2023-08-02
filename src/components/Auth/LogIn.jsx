@@ -40,14 +40,21 @@ export default function LogIn() {
     }
 
     return (
-        <div>
+        <div className='auth-page'>
+            <h1>Journal App</h1>
+            <p>by: Paul Allen</p>
             <form action="">
-            <label htmlFor="email">Email</label>
-            <input value={email} type="email" name='email' onChange={e => {
-                setEmail(e.target.value)
-                }}/>
-            <label htmlFor="password">Password</label>
-            <input value={password} type="password" name='password' id='password' onChange={e=>setPassword(e.target.value)}/>
+            <label htmlFor="email">
+                Email
+                <input value={email} type="email" name='email' onChange={e => {
+                    setEmail(e.target.value)
+                    }}/>
+            </label>
+            
+            <label htmlFor="password">
+                Password
+                <input value={password} type="password" name='password' id='password' onChange={e=>setPassword(e.target.value)}/>
+            </label>
             <button type='submit' onClick={(e)=>auth_User(e)}>Sign up</button>
             </form>
             <p>No account? <Link to='/auth/signup'>Register</Link></p>

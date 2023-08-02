@@ -1,25 +1,36 @@
 import { useState, useEffect, useContext } from "react"
 import { UserAuthContext } from "../../Helper/Context"
 export default   function TaskDetails(params){
-    const {taskShow, getTasks, setIsTaskEmpty, categories, setShowAddCategoryModal} = params
+    const {taskShow, getTasks, setIsTaskEmpty, categories, setShowAddCategoryModal, setTaskShow, getTasksByCategory} = params
     const {token, setUserAuth} = useContext(UserAuthContext)
-    const [editedTaskName, setEditedTaskName] = useState(taskShow.name)
-    const [editedCategoryName, setEditedCategoryName ]= useState(categoryName(categories)[0])
-    const [editedCategoryId, setEditedCategoryId ]= useState(taskShow.category_id)
-    const [editedDescription,setEditedDescription] = useState(taskShow.description)
-    const [editedDueDate,setEditedDueDate] = useState((new Date(taskShow.due_date)).toUTCString().toString())
+    const [editedTaskName, setEditedTaskName] = useState('')
+    const [editedCategoryName, setEditedCategoryName ]= useState('')
+    const [editedCategoryId, setEditedCategoryId ]= useState('')
+    const [editedDescription,setEditedDescription] = useState('')
+    const [editedDueDate,setEditedDueDate] = useState('')
+    const [category, setCategory] = useState('')
     const [isEditing, setIsEditing ]= useState(false)
     const API_URL = import.meta.env.VITE_REACT_APP_API_URL
     const id = taskShow.id
     const isComplete = taskShow.is_complete
 
-    function categoryName(categories){
+    function editingMode(){
+        setIsEditing(true)
+        setEditedCategoryName(category['name'])
+        setEditedCategoryId(taskShow.category_id)
+        setEditedDescription(taskShow.description)
+        setEditedTaskName(taskShow.name)
+        setEditedDueDate((new Date(taskShow.due_date)).toUTCString().toString())
+    }
+    function getCategoryName(categories){
         return categories.map(category=>{
-            if(category.id == taskShow.category_id){
-                return category.name
-            } 
+            if (category.id == taskShow.category_id){
+                setCategory(category)
+            }
+            
         })
     }
+    console.log(taskShow.category_id)
     const categoryList=(categories)=>{
         return categories.map(category =>{
             return (<option key={category.id} id={category.id} value={category.name}>{category.name}
@@ -54,7 +65,6 @@ export default   function TaskDetails(params){
             })
             const res = await deleteTaskResponse.json()
             if(res.status == 'success'){
-              console.log(res.body)
               getTasks()
               setIsTaskEmpty(true)
             }
@@ -86,7 +96,6 @@ export default   function TaskDetails(params){
             const res = await markCompleteResponse.json()
             console.log(res)
             if(res.status == 'success'){
-              console.log(res.body)
               getTasks()
               setIsTaskEmpty(true)
             }
@@ -116,8 +125,10 @@ export default   function TaskDetails(params){
             })
             const res = await updateTaskResponse.json()
             if(res.status == 'success'){
-              console.log(res.body)
               getTasks()
+              setTaskShow(res.body)
+              console.log('updated')
+              
             }
             else{
               setUserAuth(false)
@@ -128,66 +139,101 @@ export default   function TaskDetails(params){
             
           }
     }
-    
+    useEffect(()=>{
+        getCategoryName(categories)
+    },[])
     return(
-        <>
-            { !isEditing ?
-            <div>
-                <div>
-                    <button type='button' onClick={()=>{
-                        setIsEditing(true)
-                    }}>
-                        Edit
-                    </button>
-                    <button type='button' onClick={()=>{
-                        deleteTask()
-                    }}>
-                        Delete
-                    </button>
-                    {!isComplete ? <button type='button' onClick={()=>{markComplete("true")}}>
-                        Mark as Complete
-                    </button>:
-                    <button type='button' onClick={()=>{markComplete("false")}}>
-                        Mark as Undone
-                    </button>}
+        <div className="task-details-container">
+            <div className="show-task-wrapper">
+                <div className="show-task-header">
+                { !isEditing ?
+                    <>  <div>
+                            <h1 className="task-details-name">{taskShow.name}</h1>
+                        </div>
+                        <div className="task-details-buttons-wrapper">
+                            <button className="task-details-button edit" type='button' onClick={()=>{
+                                editingMode()
+                            }}>
+                                Edit
+                            </button>
+                            <button className="task-details-button red" type='button' onClick={()=>{
+                                deleteTask()
+                            }}>
+                                Delete
+                            </button>
+                            {!isComplete ? <button className="task-details-button complete" type='button' onClick={()=>{markComplete("true")}}>
+                                Mark as Complete
+                            </button>:
+                            <button className="task-details-button" type='button' onClick={()=>{markComplete("false")}}>
+                                Mark as Undone
+                            </button>}
+                        </div>
+                       </>
+                    :
+                    <>
+                        <div>
+                            <input className="task-details-name" value={editedTaskName} onChange={(e)=>{
+                                setEditedTaskName(e.target.value)
+                            }}></input>
+                        </div>
+                        
+                        <div className="task-details-buttons-wrapper">
+                            <button className="task-details-button save" type='button' onClick={()=>{
+                                setIsEditing(false)
+                                updateTask()
+                            }}>
+                                Save
+                            </button>
+                            <button className="task-details-button red" type='button' onClick={()=>{
+                                setIsEditing(false)
+                            }}>
+                                Discard
+                            </button>
+                        </div>
+                    </>
+                     }
                 </div>
-                <h1>{taskShow.name}</h1>
-                <h3>{categoryName[0]}</h3>
-                <h4>Due by {dueDate()}</h4>
-                <p>{taskShow.description}</p>
-            </div>:
-            // EDIT UI
-            <div>
-                <div>
-                    <button type='button' onClick={()=>{
-                        setIsEditing(false)
-                        updateTask()
-                    }}>
-                        Save
-                    </button>
-                    <button type='button' onClick={()=>{
-                        setIsEditing(false)
-                    }}>
-                        Discard
-                    </button>
-                </div>
-                <input value={editedTaskName} onChange={(e)=>{
-                    console.log(e.target.value)
-                    setEditedTaskName(e.target.value)
-                }}></input>
-                <select value={editedCategoryName} onChange={(e)=>{onChangeCategory(e)}}>
-                    {categoryList(categories)}
-                </select>
-                <button onClick={()=>setShowAddCategoryModal(true)}>Add Category</button>
-                {/* <h3>{categoryName[0]}</h3> */}
-                {/* <h4>Due by {dueDate()}</h4> */}
-                <input value={editedDueDate}type="datetime-local" id="due-date" onChange={(e)=>setEditedDueDate(e.target.value)}/>
-                
-                <input value={editedDescription}type="text" onChange={(e)=>{
-                    setEditedDescription(e.target.value)
-                }}/>
-            </div>}
-        </>
+                {!isEditing ? 
+                    <>
+                        <div className="task-category-wrapper">
+                            <h3 className="task-details-category">Catergory: {category['name']}</h3>
+                        </div>
+                        <div className="task-due-date-wrapper">
+                            <h4>Due by {dueDate()}</h4>
+                        </div>
+                        <div className="task-description-wrapper">
+                            <h3>Task Description</h3>
+                            <p className="task-details-description">{taskShow.description}</p>
+                        </div>
+                    </>
+                    : 
+                    <>
+                    <div className="task-category-wrapper">
+                        <label htmlFor="category">
+                            Select Category:
+                            <select className="task-details-category" id='category'value={editedCategoryName} onChange={(e)=>{onChangeCategory(e)}}>
+                                {categoryList(categories)}
+                            </select>
+                        </label>
+                        <button onClick={()=>setShowAddCategoryModal(true)}>Add Category</button>
+                    </div>
+                    <div className="task-due-date-wrapper">
+                    <label htmlFor="">Due Date</label>
+                        <input value={editedDueDate}type="datetime-local" id="due-date" onChange={(e)=>{
+                            console.log(e.target.value)
+                            setEditedDueDate(e.target.value)}}/>
+                    </div>
+                    <div className="task-description-wrapper">
+                        <label htmlFor="">
+                            Task Description
+                            <input className="task-details-description" value={editedDescription}type="text" onChange={(e)=>{
+                            setEditedDescription(e.target.value)
+                            }}/>
+                        </label>
+                    </div>
+                   </>}  
+            </div>
+        </div>
     )
 
   }
