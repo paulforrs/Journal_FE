@@ -127,6 +127,7 @@ export default   function TaskDetails(params){
             if(res.status == 'success'){
               getTasks()
               setTaskShow(res.body)
+              getTasksByCategory()
               console.log('updated')
               
             }
@@ -141,7 +142,7 @@ export default   function TaskDetails(params){
     }
     useEffect(()=>{
         getCategoryName(categories)
-    },[])
+    },[taskShow])
     return(
         <div className="task-details-container">
             <div className="show-task-wrapper">

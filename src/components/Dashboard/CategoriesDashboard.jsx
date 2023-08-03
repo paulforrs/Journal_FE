@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react"
 import { UserAuthContext } from "../../Helper/Context"
 import TaskDetails from "./TaskDetails"
+import AddTaskInCategory from "../Modals/AddTaskInCategory"
 
 export default function CategoriesDashboard(params) {
-  const {tasks, setShowAddTaskModal, getTasks, categories, setShowAddCategoryModal, getCategories} = params
+  const {tasks, setShowAddTaskModal, getTasks, categories, setShowAddCategoryModal, getCategories, showAddTaskModal} = params
   const {token} = useContext(UserAuthContext)
   const [taskShow, setTaskShow] = useState({})
   const [isTaskEmpty, setIsTaskEmpty] = useState(true)
@@ -23,7 +24,7 @@ export default function CategoriesDashboard(params) {
     })
   }
   
-  const getTasksByCategory=async()=>{
+  const getTasksByCategory= async()=>{
     console.log('gentaskcat')
     try {
       const getTasksByCategoryResponse = await fetch(`${API_URL}/users/id/categories/tasks`,{
@@ -68,6 +69,7 @@ export default function CategoriesDashboard(params) {
     }
   }
   const updateCategory = async()=>{
+    console.log('updated')
     try {
       const getUpdateCategoryRes = await fetch(`${API_URL}/users/id/categories/${categoryShowId}`,{
         method: "PATCH",
@@ -84,13 +86,13 @@ export default function CategoriesDashboard(params) {
       const res = await getUpdateCategoryRes.json()
       if(res.status == 'success'){
         getTasksByCategory()
-        console.log(res.body)
         getCategories()
         console.log(res)
         setCategoryShow([])
         // console.log(res.body)
       }
       else{
+        console.log(res.status)
         // setUserAuth(false)
       }
     } catch (error) {
@@ -100,6 +102,7 @@ export default function CategoriesDashboard(params) {
   const generateCategories=(categories)=>{
     return categories.map((category)=>{
       return <li key={category.id} id={category.id} onClick={()=>{
+        setIsEditing(false)
         setCategoryShowId(category.id)
         setCategory(category.id)}}>
         {category.name}
@@ -107,7 +110,6 @@ export default function CategoriesDashboard(params) {
     })
   }
   const generateTasks=(categoryShow)=>{
-    console.log(categoryShow)
     if(categoryShow.length != 0){
       const tasks = categoryShow.tasks
       if(tasks.length == 0){
@@ -116,6 +118,7 @@ export default function CategoriesDashboard(params) {
       else{
         return tasks.map(task=>{
           return (<div key={task.id} className="task-item" onClick={()=>{
+            
             setTaskShow(task)
             setIsTaskEmpty(false)
           }}>
@@ -130,12 +133,20 @@ export default function CategoriesDashboard(params) {
     setCategory()
   },[])
   useEffect(()=>{
-    console.log(categoryShow)
     setCategory(categoryShowId)
     generateTasks(categoryShow)
-  }, [categoriesObject])
+    generateCategories(categories)
+  }, [categoriesObject, categories])
+
   return (
     <>
+      {showAddTaskModal &&
+      <AddTaskInCategory
+      setShowAddTaskModal={setShowAddTaskModal}
+      getTasks={getTasks}
+      categoryShowId={categoryShowId}
+      getTasksByCategory={getTasksByCategory}/>
+      }
       <div className="categories-dashboard dashboard-container">
         <ul className="category-list">
           {generateCategories(categories)}
@@ -155,6 +166,7 @@ export default function CategoriesDashboard(params) {
             :
             <p>{categoryShow.category_name}</p>}
             <div>
+              <button onClick={()=>setShowAddTaskModal(true)}>Add task</button>
               <button onClick={()=>{
                 setEditedCategoryName(categoryShow.category_name)
                 setIsEditing(true)}}>Edit</button>
@@ -168,7 +180,8 @@ export default function CategoriesDashboard(params) {
         {!isTaskEmpty && 
         <TaskDetails taskShow={taskShow} getTasks={getTasks} setIsTaskEmpty={setIsTaskEmpty} categories={categories}
         setShowAddCategoryModal={setShowAddCategoryModal}
-        setTaskShow={setTaskShow} getTasksByCategory={getTasksByCategory}/>
+        setTaskShow={setTaskShow}
+        getTasksByCategory={getTasksByCategory}/>
         }
         
       </div>

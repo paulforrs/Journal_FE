@@ -107,6 +107,7 @@ export default function Dashboard(params) {
             getTasks={getTasks}
             categories={categories}
             setShowAddCategoryModal={setShowAddCategoryModal}
+            showAddTaskModal={showAddTaskModal}
           />}
 
         {showTasks &&
